@@ -6,7 +6,7 @@ I'll update as I work through each section of the megatutorial.
 
 - [x] Hello World
 - [x] Templating
-- [ ] Web Forms
+- [x] Web Forms
 - [ ] Database
 - [ ] User Logins
 - [ ] Profile Page and Avatars
