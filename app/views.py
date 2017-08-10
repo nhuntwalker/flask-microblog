@@ -1,5 +1,5 @@
 """Request handlers for the microblog."""
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, url_for
 from app import app
 from app.forms import LoginForm
 
@@ -28,4 +28,9 @@ def index():
 def login():
     """View for handling GET and POST requests to the login route."""
     form = LoginForm()
+    if form.validate_on_submit():
+        flash(
+            f'Login requested for username: {form.username.data}, password: {form.password.data}, remember_me: {form.remember_me.data}'
+        )
+        return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
