@@ -13,11 +13,11 @@ class TestCase(unittest.TestCase):
         app.config['TESTING'] = True
         self.client = app.test_client()
 
-    def test_hello_world(self):
+    def test_home_route_shows_username(self):
         """."""
         response = self.client.get('/')
-        self.assertEqual(
-            b'Hello, World!', response.data
+        self.assertTrue(
+            b'Nick' in response.data
         )
 
 if __name__ == '__main__':
