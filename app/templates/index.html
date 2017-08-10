@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ title }} - Flask Microblog</title>
-</head>
-<body>
-    <h1>Welcome, {{ user.nickname }}!</h1>
-    {% for post in posts %}
-    <div>
-        <p>Author: {{ post.author.nickname }}</p>
-        <p>{{ post.body }}</p>
-    </div>
-    {% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome, {{ user.nickname }}!</h1>
+{% for post in posts %}
+<div>
+    <p>Author: {{ post.author.nickname }}</p>
+    <p>{{ post.body }}</p>
+</div>
+{% endfor %}
+{% endblock %}
