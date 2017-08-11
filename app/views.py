@@ -24,6 +24,7 @@ POSTS = [
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def index() -> LocalStack:
     """The home page for the Flask microblog."""
     context = {'title': 'Home'}
@@ -48,17 +49,25 @@ def login() -> Union[Response, LocalStack]:
     if request.method == 'POST':
 
         if form.validate_on_submit():
-            flash(
-                f'Login requested for username: {form.username.data}, password: {form.password.data}, remember_me: {form.remember_me.data}'
-            )
             if form.check_credentials():
                 session['remember_me'] = form.remember_me.data
+                user = User.query.filter_by(
+                    username=form.username.data
+                ).first()
+                login_user(user, remember=form.remember_me.data)
                 return redirect(url_for('index'))
 
         flash('Invalid login. Please try again.')
 
     context = {'title': 'Sign In', 'form': form}
     return render_template('login.html', **context)
+
+
+@app.route('/logout')
+def logout() -> LocalStack:
+    """Log a user out and remove from global context."""
+    logout_user()
+    return render_template('logout.html')
 
 
 @lm.user_loader
@@ -68,7 +77,13 @@ def load_user(id: int) -> User:
 
 
 def authenticated(g_ctx: g) -> bool:
-    """Is the authenticated user available in the global context?"""
+    """Check if the authenticated user is available in the global context."""
     if hasattr(g, 'user') and g.user is not None and g.user.is_authenticated:
         return True
     return False
+
+
+@app.before_request
+def before_request() -> None:
+    """Execute this before every request."""
+    g.user = current_user
