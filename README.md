@@ -10,7 +10,7 @@ I'll update as I work through each section of the megatutorial.
 - [x] Hello World
 - [x] Templating
 - [x] Web Forms
-- [ ] Database
+- [ ] Database - Continue from the "Database relationships" subheading.
 - [ ] User Logins
 - [ ] Profile Page and Avatars
 - [x] Unit Testing
