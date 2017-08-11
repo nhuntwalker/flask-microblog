@@ -1,5 +1,5 @@
 """Request handlers for the microblog."""
-from flask import render_template, flash, redirect, url_for, request, g
+from flask import render_template, flash, redirect, url_for, request, g, session
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
 from app.forms import LoginForm
@@ -26,15 +26,22 @@ POSTS = [
 @app.route('/index')
 def index() -> LocalStack:
     """The home page for the Flask microblog."""
-    user = {'nickname': 'Nick'}
-    context = {'title': 'Home', 'user': user, 'posts': POSTS}
+    context = {'title': 'Home'}
+    if authenticated(g):
+        user = {'nickname': g.user.username}
+        context['user'] = user
+    else:
+        context['user'] = None
+
+    context['posts'] = POSTS
     return render_template('index.html', **context)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login() -> Union[Response, LocalStack]:
     """View for handling GET and POST requests to the login route."""
-    if g.user is not None and g.user.is_authenticated:
+
+    if authenticated(g):
         return redirect(url_for('index'))
 
     form = LoginForm()
@@ -60,3 +67,8 @@ def load_user(id: int) -> User:
     return User.query.get(int(id))
 
 
+def authenticated(g_ctx: g) -> bool:
+    """Is the authenticated user available in the global context?"""
+    if hasattr(g, 'user') and g.user is not None and g.user.is_authenticated:
+        return True
+    return False
