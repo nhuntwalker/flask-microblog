@@ -1,7 +1,8 @@
 """Request handlers for the microblog."""
 from flask import render_template, flash, redirect, url_for
-from app import app
+from app import app, db, lm
 from app.forms import LoginForm
+from app.models import User
 
 from typing import Union
 from werkzeug.local import LocalStack
@@ -40,3 +41,9 @@ def login() -> Union[Response, LocalStack]:
         return redirect(url_for('index'))
     context = {'title': 'Sign In', 'form': form}
     return render_template('login.html', **context)
+
+
+@lm.user_loader
+def load_user(id: int) -> User:
+    """Given an ID, load a user from the database."""
+    return User.query.get(int(id))
