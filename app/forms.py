@@ -11,3 +11,12 @@ class LoginForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
     remember_me = BooleanField('remember_me', default=False)
+
+    def check_credentials(self) -> bool:
+        """Check credentials for a username/password set."""
+        user = User.query.filter_by(
+            username=self.username.data
+        ).first()
+        if not user or not self.password.data or user.password != self.password.data:
+            return False
+        return True
