@@ -8,12 +8,12 @@ from app import app
 class TestCase(unittest.TestCase):
     """The test cases for this app."""
 
-    def setUp(self):
+    def setUp(self) -> None:
         """."""
         app.config['TESTING'] = True
         self.client = app.test_client()
 
-    def test_home_route_shows_username(self):
+    def test_home_route_shows_username(self) -> None:
         """."""
         response = self.client.get('/')
         self.assertTrue(

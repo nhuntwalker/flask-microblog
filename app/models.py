@@ -11,7 +11,7 @@ class User(db.Model):
     password = db.Column(db.Unicode)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String representation of the User model."""
         return f'<User {self.username} | id: {self.id}>'
 
@@ -25,6 +25,6 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """String representation of the Post model."""
         return f'<Post {self.title}>'
