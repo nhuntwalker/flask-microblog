@@ -15,6 +15,25 @@ class User(db.Model):
         """String representation of the User model."""
         return f'<User {self.username} | id: {self.id}>'
 
+    @property
+    def is_authenticated(self) -> bool:
+        """Whether or not the user is authenticated."""
+        return True
+
+    @property
+    def is_active(self) -> bool:
+        """Whether or not the user is active."""
+        return True
+
+    @property
+    def is_anonymous(self) -> bool:
+        """Whether or not the user is anonymous."""
+        return False
+
+    def get_id(self) -> str:
+        """Retrieve the ID for this user."""
+        return str(self.id)
+
 
 class Post(db.Model):
     """The Post model."""
