@@ -11,7 +11,7 @@ I'll update as I work through each section of the megatutorial.
 - [x] Templating
 - [x] Web Forms
 - [x] Database
-- [ ] User Logins
+- [ ] User Logins -- Need to add user registration, and clean up the rougher edges
 - [ ] Profile Page and Avatars
 - [x] Unit Testing
 - [ ] Followers, Contacts, and Friends
