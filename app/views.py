@@ -92,6 +92,13 @@ def register() -> Response:
             if pw1 != pw2:
                 flash("Passwords don't match")
                 return render_template('register.html', **context)
+            new_user = User(
+                username=username, password=pw1
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(user)
+            return redirect(url_for('index'))
 
     return render_template('register.html', **context)
 
