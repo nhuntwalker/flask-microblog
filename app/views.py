@@ -23,7 +23,6 @@ POSTS = [
 
 
 @app.route('/')
-@app.route('/index')
 @login_required
 def index() -> LocalStack:
     """The home page for the Flask microblog."""
