@@ -77,11 +77,22 @@ def register() -> Response:
         return redirect(url_for('index'))
 
     form = RegistrationForm()
+    context = {'title': "Register New User", 'form': form}
+
     if request.method == "POST":
         # create a new user and log them in.
-        pass
+        if form.validate_on_submit():
+            username = form.username.data
+            user_exists = User.query.filter_by(username=username).first()
+            if user_exists:
+                flash('This user already exists.')
+                return render_template('register.html', **context)
+            pw1 = form.password.data
+            pw2 = form.password2.data
+            if pw1 != pw2:
+                flash("Passwords don't match")
+                return render_template('register.html', **context)
 
-    context = {'title': "Register New User", 'form': form}
     return render_template('register.html', **context)
 
 

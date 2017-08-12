@@ -21,3 +21,11 @@ class LoginForm(FlaskForm):
         if not user or not self.password.data or user.password != self.password.data:
             return False
         return True
+
+
+class RegistrationForm(FlaskForm):
+    """Constructor of the registration form."""
+
+    username = StringField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
+    password2 = PasswordField('password2', validators=[DataRequired()])
