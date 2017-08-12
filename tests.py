@@ -127,6 +127,15 @@ class TestCase(unittest.TestCase):
         query = db.session.query(models.User)
         self.assertTrue(query.count() == 1)
 
+    def test_unauthenticated_user_cannot_visit_profile_and_redirects_to_login(self) -> None:
+        """."""
+        user = self.create_user()
+        response = self.client.get(f'/profile/{user.username}')
+        self.assertTrue(response.status_code == 302)
+        self.assertTrue(
+            'http://localhost/login' in response.location
+        )
+
     def test_auth_user_can_visit_profile(self) -> None:
         """."""
         user = self.create_user()
