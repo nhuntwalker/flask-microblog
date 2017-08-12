@@ -13,11 +13,12 @@ class TestCase(unittest.TestCase):
         app.config['TESTING'] = True
         self.client = app.test_client()
 
-    def test_home_route_shows_username(self) -> None:
+    def test_unauthenticated_home_route_redirects_to_login(self) -> None:
         """."""
         response = self.client.get('/')
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(
-            b'Nick' in response.data
+            'http://localhost/login' in response.location
         )
 
 if __name__ == '__main__':
