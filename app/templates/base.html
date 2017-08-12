@@ -6,7 +6,13 @@
 <body>
     <nav>
         <ul>
-            <li><a href="/index">Home</a></li>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            {% if g.user.is_authenticated %}
+            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+            {% else %}
+            <li><a href="{{ url_for('login') }}">Log In</a></li>
+            <li><a href="{{ url_for('register') }}">Register</a></li>
+            {% endif %}
         </ul>
     </nav>
     <hr />
