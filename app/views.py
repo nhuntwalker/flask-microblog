@@ -97,7 +97,7 @@ def register() -> Response:
             )
             db.session.add(new_user)
             db.session.commit()
-            login_user(user)
+            login_user(new_user)
             return redirect(url_for('index'))
 
     return render_template('register.html', **context)
