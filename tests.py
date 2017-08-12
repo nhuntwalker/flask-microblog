@@ -145,6 +145,13 @@ class TestCase(unittest.TestCase):
         h1 = html.find('h1')
         self.assertTrue(h1.text == f'User: {user.username}')
 
+    def test_nonexistent_profiles_redirect_to_home(self) -> None:
+        """."""
+        user = self.create_user()
+        self.authenticate_user(user)
+        response = self.client.get(f'/profile/potato')
+        self.assertTrue(response.location == 'http://localhost/')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -108,7 +108,7 @@ def profile(username) -> Union[LocalStack, Response]:
     """View for a user's profile."""
     user = User.query.filter_by(username=username).first()
     if not user:
-        return redirect(url_for('/index'))
+        return redirect(url_for('index'))
     posts = [
         {'author': user, 'body': 'Test post #1'},
         {'author': user, 'body': 'Test post #2'}
