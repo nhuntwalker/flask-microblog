@@ -37,6 +37,14 @@ class TestCase(unittest.TestCase):
         db.session.commit()
         return new_user
 
+    def authenticate_user(self, user) -> None:
+        """."""
+        self.client.post('/login', data={
+            'username': user.username,
+            'password': user.password,
+            'csrf_token': self.get_token('/login')
+        })
+
     def test_unauthenticated_home_route_redirects_to_login(self) -> None:
         """."""
         response = self.client.get('/')
@@ -118,6 +126,15 @@ class TestCase(unittest.TestCase):
         })
         query = db.session.query(models.User)
         self.assertTrue(query.count() == 1)
+
+    def test_auth_user_can_visit_profile(self) -> None:
+        """."""
+        user = self.create_user()
+        self.authenticate_user(user)
+        response = self.client.get(f'/profile/{user.username}')
+        html = Soup(response.data, 'html.parser')
+        h1 = html.find('h1')
+        self.assertTrue(h1.text == f'User: {user.username}')
 
 
 if __name__ == '__main__':
