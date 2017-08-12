@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Welcome, {{ user.nickname }}!</h1>
-{% for post in posts %}
-<div>
-    <p>Author: {{ post.author.nickname }}</p>
-    <p>{{ post.body }}</p>
-</div>
-{% endfor %}
+{% if posts %}
+    <table>
+    {% for post in posts %}
+        {% include 'post.html' %}
+    {% endfor %}
+    </table>
+{% endif %}
 {% endblock %}
