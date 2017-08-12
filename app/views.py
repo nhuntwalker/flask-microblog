@@ -2,7 +2,7 @@
 from flask import render_template, flash, redirect, url_for, request, g, session
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
 from app.models import User
 
 from typing import Union
@@ -68,6 +68,21 @@ def logout() -> LocalStack:
     """Log a user out and remove from global context."""
     logout_user()
     return render_template('logout.html')
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register() -> Response:
+    """Register a new user and log them in."""
+    if authenticated(g):
+        return redirect(url_for('index'))
+
+    form = RegistrationForm()
+    if request.method == "POST":
+        # create a new user and log them in.
+        pass
+
+    context = {'title': "Register New User", 'form': form}
+    return render_template('register.html', **context)
 
 
 @lm.user_loader
