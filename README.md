@@ -12,7 +12,7 @@ I'll update as I work through each section of the megatutorial.
 - [x] Web Forms
 - [x] Database
 - [x] User Logins
-- [ ] Profile Page and Avatars
+- [x] Profile Page and Avatars
 - [x] Unit Testing
 - [ ] Followers, Contacts, and Friends
 - [ ] Pagination
@@ -32,4 +32,4 @@ I'll update as I work through each section of the megatutorial.
 - Instead of using sqlite as my database, I'm using a PostgreSQL database, with configuration set up in my environment.
 - Added Python 3.6 type annotations.
 - Using a dictionary for view context instead of explicit keyword arguments
-- I didn't really feel like using Gravatar for images
+- I didn't really feel like using Gravatar for images so the users have no images on them. Tough.
