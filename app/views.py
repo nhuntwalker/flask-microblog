@@ -1,4 +1,5 @@
 """Request handlers for the microblog."""
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, session
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
@@ -134,3 +135,7 @@ def authenticated(g_ctx: g) -> bool:
 def before_request() -> None:
     """Execute this before every request."""
     g.user = current_user
+    if g.user.is_authenticated:
+        g.user.last_seen = datetime.utcnow()
+        db.session.add(g.user)
+        db.session.commit()
