@@ -1,8 +1,9 @@
 """Request handlers for the microblog."""
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, session
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, ProfileForm
 from app.models import User
 
 from typing import Union
@@ -117,6 +118,24 @@ def profile(username) -> Union[LocalStack, Response]:
     return render_template('profile.html', **context)
 
 
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    """View for editing a user's profile."""
+    form = ProfileForm()
+    if form.validate_on_submit():
+        g.user.username = form.username.data
+        g.user.about_me = form.about_me.data
+        db.session.add(g.user)
+        db.session.commit()
+        return redirect(url_for('profile'))
+    else:
+        form.username.data = g.user.username
+        form.about_me.data = g.user.about_me
+    context = {'form': form}
+    return render_template('edit_profile.html', **context)
+
+
 @lm.user_loader
 def load_user(id: int) -> User:
     """Given an ID, load a user from the database."""
@@ -134,3 +153,7 @@ def authenticated(g_ctx: g) -> bool:
 def before_request() -> None:
     """Execute this before every request."""
     g.user = current_user
+    if g.user.is_authenticated:
+        g.user.last_seen = datetime.utcnow()
+        db.session.add(g.user)
+        db.session.commit()
