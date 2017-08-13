@@ -122,7 +122,7 @@ def profile(username) -> Union[LocalStack, Response]:
 @login_required
 def edit_profile():
     """View for editing a user's profile."""
-    form = ProfileForm()
+    form = ProfileForm(g.user.username)
     if form.validate_on_submit():
         g.user.username = form.username.data
         g.user.about_me = form.about_me.data
