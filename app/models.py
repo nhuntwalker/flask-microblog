@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 from app import db
+from typing import Union
 
 
 followers = db.Table(
@@ -50,6 +51,12 @@ class User(db.Model):
     def get_id(self) -> str:
         """Retrieve the ID for this user."""
         return str(self.id)
+
+    def follow(self, user) -> Union[User, None]:
+        """Follow a new user."""
+        if not self.is_following(user):
+            self.followed.append(user)
+            return self
 
 
 class Post(db.Model):

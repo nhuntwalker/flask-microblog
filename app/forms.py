@@ -37,12 +37,12 @@ class ProfileForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     about_me = TextAreaField('about_me')
 
-    def __init__(self, original_username, *args, **kwargs):
+    def __init__(self, original_username, *args, **kwargs) -> None:
         """Form constructor, modified to preserve original username."""
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.original_username = original_username
 
-    def validate(self):
+    def validate(self) -> bool:
         """Validate the form, paying special attention to duplicate names."""
         if not FlaskForm.validate(self):
             return False

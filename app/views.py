@@ -120,7 +120,7 @@ def profile(username) -> Union[LocalStack, Response]:
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
-def edit_profile():
+def edit_profile() -> Union[LocalStack, Response]:
     """View for editing a user's profile."""
     form = ProfileForm(g.user.username)
     if form.validate_on_submit():
@@ -137,13 +137,13 @@ def edit_profile():
 
 
 @app.errorhandler(404)
-def not_found_error(error):
+def not_found_error(error) -> LocalStack:
     """View for a 404 error."""
     return render_template('404.html'), 404
 
 
 @app.errorhandler(500)
-def internal_error(error):
+def internal_error(error) -> LocalStack:
     """View for a 500 error."""
     db.session.rollback()
     return render_template('500.html'), 500
