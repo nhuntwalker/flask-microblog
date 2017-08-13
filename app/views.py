@@ -136,6 +136,19 @@ def edit_profile():
     return render_template('edit_profile.html', **context)
 
 
+@app.errorhandler(404)
+def not_found_error(error):
+    """View for a 404 error."""
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    """View for a 500 error."""
+    db.session.rollback()
+    return render_template('500.html'), 500
+
+
 @lm.user_loader
 def load_user(id: int) -> User:
     """Given an ID, load a user from the database."""
