@@ -10,6 +10,8 @@ class User(db.Model):
     username = db.Column(db.Unicode(length=80), index=True, unique=True)
     password = db.Column(db.Unicode)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    about_me = db.Column(db.Unicode)
+    last_seen = db.Column(db.DateTime)
 
     def __repr__(self) -> str:
         """String representation of the User model."""

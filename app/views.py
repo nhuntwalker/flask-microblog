@@ -70,7 +70,7 @@ def logout() -> LocalStack:
 
 
 @app.route('/register', methods=["GET", "POST"])
-def register() -> Response:
+def register() -> Union[LocalStack, Response]:
     """Register a new user and log them in."""
     if authenticated(g):
         return redirect(url_for('index'))
@@ -100,6 +100,21 @@ def register() -> Response:
             return redirect(url_for('index'))
 
     return render_template('register.html', **context)
+
+
+@app.route('/profile/<username>')
+@login_required
+def profile(username) -> Union[LocalStack, Response]:
+    """View for a user's profile."""
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return redirect(url_for('index'))
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    context = {'user': user, 'posts': posts}
+    return render_template('profile.html', **context)
 
 
 @lm.user_loader
