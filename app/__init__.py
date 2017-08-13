@@ -13,4 +13,21 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
+if not app.debug:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler(
+        filename='tmp/microblog.log',
+        mode='a',
+        maxBytes=1 * 1024 * 1024,
+        backupCount=10
+    )
+    file_handler.setFormatter(logging.formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    app.logger.setLevel(logging.INFO)
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+    app.logger.info('microblog startup')
+
 from app import views, models

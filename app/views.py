@@ -122,7 +122,7 @@ def profile(username) -> Union[LocalStack, Response]:
 @login_required
 def edit_profile():
     """View for editing a user's profile."""
-    form = ProfileForm()
+    form = ProfileForm(g.user.username)
     if form.validate_on_submit():
         g.user.username = form.username.data
         g.user.about_me = form.about_me.data
@@ -134,6 +134,19 @@ def edit_profile():
         form.about_me.data = g.user.about_me
     context = {'form': form}
     return render_template('edit_profile.html', **context)
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    """View for a 404 error."""
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    """View for a 500 error."""
+    db.session.rollback()
+    return render_template('500.html'), 500
 
 
 @lm.user_loader

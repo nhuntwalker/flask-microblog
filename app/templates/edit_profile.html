@@ -6,7 +6,12 @@
     <table>
         <tr>
             <td>Username:</td>
-            <td>{{ form.username }}</td>
+            <td>
+                {{ form.username }}
+                {% for error in form.errors.username %}
+                <br/><span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td>About Yourself:</td>
