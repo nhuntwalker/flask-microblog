@@ -2,8 +2,8 @@
 #!/usr/bin/env python
 from app.models import User
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, BooleanField, TextAreaField
+from wtforms.validators import DataRequired, Length
 
 
 class LoginForm(FlaskForm):
@@ -29,3 +29,10 @@ class RegistrationForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
     password2 = PasswordField('password2', validators=[DataRequired()])
+
+
+class ProfileForm(FlaskForm):
+    """Constructor of the form for editing profiles."""
+
+    username = StringField('username', validators=[DataRequired()])
+    about_me = TextAreaField('about_me', validators=[Length()])
