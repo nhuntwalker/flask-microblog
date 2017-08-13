@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, session
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, ProfileForm
 from app.models import User
 
 from typing import Union
@@ -116,6 +116,24 @@ def profile(username) -> Union[LocalStack, Response]:
     ]
     context = {'user': user, 'posts': posts}
     return render_template('profile.html', **context)
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    """View for editing a user's profile."""
+    form = ProfileForm()
+    if form.validate_on_submit():
+        g.user.username = form.username.data
+        g.user.about_me = form.about_me.data
+        db.session.add(g.user)
+        db.session.commit()
+        return redirect(url_for('profile'))
+    else:
+        form.username.data = g.user.username
+        form.about_me.data = g.user.about_me
+    context = {'form': form}
+    return render_template('edit_profile.html', **context)
 
 
 @lm.user_loader
