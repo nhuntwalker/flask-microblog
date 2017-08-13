@@ -35,7 +35,7 @@ class ProfileForm(FlaskForm):
     """Constructor of the form for editing profiles."""
 
     username = StringField('username', validators=[DataRequired()])
-    about_me = TextAreaField('about_me', validators=[Length()])
+    about_me = TextAreaField('about_me')
 
     def __init__(self, original_username, *args, **kwargs):
         """Form constructor, modified to preserve original username."""
