@@ -52,11 +52,33 @@ class User(db.Model):
         """Retrieve the ID for this user."""
         return str(self.id)
 
-    def follow(self, user) -> Union[User, None]:
+    def follow(self, user):
         """Follow a new user."""
         if not self.is_following(user):
             self.followed.append(user)
             return self
+
+    def unfollow(self, user):
+        """Unfollow one of an existing set of users."""
+        if self.is_following(user):
+            self.followed.remove(user)
+            return self
+
+    def is_following(self, user) -> bool:
+        """Check if a given user is being followed."""
+        return self.followed.filter(followers.c.followed_id == user.id).count() > 0
+
+    def followed_posts(self):
+        """Retrieve all of the posts from users this user follows."""
+        import pdb; pdb.set_trace()
+        return Post.query.join(
+            followers,
+            (followers.c.followed_id == Post.user_id)
+        ).filter(
+            followers.c.follower_id == self.id
+        ).order_by(
+            Post.timestamp.desc()
+        )
 
 
 class Post(db.Model):
