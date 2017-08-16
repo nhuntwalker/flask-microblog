@@ -70,7 +70,6 @@ class User(db.Model):
 
     def followed_posts(self):
         """Retrieve all of the posts from users this user follows."""
-        import pdb; pdb.set_trace()
         return Post.query.join(
             followers,
             (followers.c.followed_id == Post.user_id)

@@ -1,6 +1,9 @@
 """Request handlers for the microblog."""
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request, g, session
+from flask import (
+    render_template, flash, redirect,
+    url_for, request, g, session
+)
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
 from app.forms import LoginForm, RegistrationForm, ProfileForm
@@ -41,7 +44,6 @@ def index() -> LocalStack:
 @app.route('/login', methods=['GET', 'POST'])
 def login() -> Union[Response, LocalStack]:
     """View for handling GET and POST requests to the login route."""
-
     if authenticated(g):
         return redirect(url_for('index'))
 
@@ -97,6 +99,10 @@ def register() -> Union[LocalStack, Response]:
             )
             db.session.add(new_user)
             db.session.commit()
+            # the new user will follow themselves
+            new_user.follow(new_user)
+            db.session.add(new_user)
+            dbsession.commit()
             login_user(new_user)
             return redirect(url_for('index'))
 
@@ -134,6 +140,40 @@ def edit_profile() -> Union[LocalStack, Response]:
         form.about_me.data = g.user.about_me
     context = {'form': form}
     return render_template('edit_profile.html', **context)
+
+
+@app.route('/follow/<username>')
+@login_required
+def follow(username) -> Response:
+    """For one user to follow another."""
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return redirect(url_for('index'))
+    if user == g.user:
+        return redirect(url_for('profile', username=username))
+    u = g.user.follow(user)
+    if not u:
+        return redirect(url_for('profile', username=username))
+    db.session.add(u)
+    db.session.commit()
+    return redirect(url_for('profile', username=username))
+
+
+@app.route('/unfollow/<username>')
+@login_required
+def unfollow(username) -> Response:
+    """For one user to unfollow another."""
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return redirect(url_for('index'))
+    if user == g.user:
+        return redirect(url_for('profile', username=username))
+    u = g.user.unfollow(user)
+    if not u:
+        return redirect(url_for('profile', username=username))
+    db.session.add(u)
+    db.session.commit()
+    return redirect(url_for('profile', username=username))
 
 
 @app.errorhandler(404)

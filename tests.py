@@ -210,6 +210,7 @@ class TestCase(unittest.TestCase):
         db.session.add(u2)
         db.session.add(u3)
         db.session.add(u4)
+        db.session.commit()
         # make four posts
         utcnow = datetime.utcnow()
         p1 = models.Post(title="post from john", user_id=u1.id, timestamp=utcnow + timedelta(seconds=1))
@@ -240,15 +241,14 @@ class TestCase(unittest.TestCase):
         f2 = u2.followed_posts().all()
         f3 = u3.followed_posts().all()
         f4 = u4.followed_posts().all()
-        # test is broken because code is broken. revisit soon.
-        assert len(f1) == 3
-        assert len(f2) == 2
-        assert len(f3) == 2
-        assert len(f4) == 1
-        assert f1 == [p4, p2, p1]
-        assert f2 == [p3, p2]
-        assert f3 == [p4, p3]
-        assert f4 == [p4]
+        self.assertTrue(len(f1), 3)
+        self.assertTrue(len(f2), 2)
+        self.assertTrue(len(f3), 2)
+        self.assertTrue(len(f4), 1)
+        self.assertTrue(f1, [p4, p2, p1])
+        self.assertTrue(f2, [p3, p2])
+        self.assertTrue(f3, [p4, p3])
+        self.assertTrue(f4, [p4])
 
 if __name__ == '__main__':
     unittest.main()
