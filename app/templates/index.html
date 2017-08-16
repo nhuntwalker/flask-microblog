@@ -33,9 +33,22 @@
 </form>
 {% if posts %}
     <table>
-    {% for post in posts %}
+    {% for post in posts.items %}
         {% include 'post.html' %}
     {% endfor %}
+        <tr>
+            {% if posts.has_prev %}
+            <td><a href="{{ url_for('index', page=posts.prev_num) }}">&lt;&lt; Newer posts</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            <td>|</td>
+            {% if posts.has_next %}
+            <td><a href="{{ url_for('index', page=posts.next_num) }}">&gt;&gt; Older posts</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+        </tr>
     </table>
 {% endif %}
 {% endblock %}

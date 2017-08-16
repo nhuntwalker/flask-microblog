@@ -35,7 +35,7 @@ def index(page=1) -> Union[LocalStack, Response]:
         return redirect(url_for('index'))
 
     user = {'nickname': g.user.username}
-    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False).items
+    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
 
     context = {
         'title': 'Home',
@@ -115,16 +115,14 @@ def register() -> Union[LocalStack, Response]:
 
 
 @app.route('/profile/<username>')
+@app.route('/profile/<username>/<int:page>')
 @login_required
-def profile(username) -> Union[LocalStack, Response]:
+def profile(username, page=1) -> Union[LocalStack, Response]:
     """View for a user's profile."""
     user = User.query.filter_by(username=username).first()
     if not user:
         return redirect(url_for('index'))
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    posts = user.posts.paginate(page, POSTS_PER_PAGE, False)
     context = {'user': user, 'posts': posts}
     return render_template('profile.html', **context)
 
