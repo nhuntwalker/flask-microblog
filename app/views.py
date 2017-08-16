@@ -1,13 +1,14 @@
 """Request handlers for the microblog."""
+from app import app, db, lm
+from app.forms import LoginForm, RegistrationForm, ProfileForm, PostForm
+from app.models import User, Post
+from config import POSTS_PER_PAGE
 from datetime import datetime
 from flask import (
     render_template, flash, redirect,
     url_for, request, g, session
 )
 from flask_login import login_user, logout_user, current_user, login_required
-from app import app, db, lm
-from app.forms import LoginForm, RegistrationForm, ProfileForm, PostForm
-from app.models import User, Post
 
 from typing import Union
 from werkzeug.local import LocalStack
@@ -15,8 +16,9 @@ from werkzeug.wrappers import Response
 
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/posts/<int:page>', methods=['GET', 'POST'])
 @login_required
-def index() -> Union[LocalStack, Response]:
+def index(page=1) -> Union[LocalStack, Response]:
     """The home page for the Flask microblog."""
     form = PostForm()
     if form.validate_on_submit():
@@ -33,7 +35,7 @@ def index() -> Union[LocalStack, Response]:
         return redirect(url_for('index'))
 
     user = {'nickname': g.user.username}
-    posts = g.user.followed_posts().all()
+    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False).items
 
     context = {
         'title': 'Home',
