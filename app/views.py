@@ -6,38 +6,41 @@ from flask import (
 )
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
-from app.forms import LoginForm, RegistrationForm, ProfileForm
-from app.models import User
+from app.forms import LoginForm, RegistrationForm, ProfileForm, PostForm
+from app.models import User, Post
 
 from typing import Union
 from werkzeug.local import LocalStack
 from werkzeug.wrappers import Response
 
 
-POSTS = [
-    {
-        'author': {'nickname': 'John'},
-        'body': 'Beautiful day in Seattle'
-    },
-    {
-        'author': {'nickname': 'Susan'},
-        'body': 'The Avengers movie was so good!'
-    },
-]
-
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @login_required
-def index() -> LocalStack:
+def index() -> Union[LocalStack, Response]:
     """The home page for the Flask microblog."""
-    context = {'title': 'Home'}
-    if authenticated(g):
-        user = {'nickname': g.user.username}
-        context['user'] = user
-    else:
-        context['user'] = None
+    form = PostForm()
+    if form.validate_on_submit():
+        existing_post = Post.query.filter_by(title=form.title.data).first()
+        if not existing_post:
+            post = Post(
+                title=form.title.data,
+                body=form.body.data,
+                timestamp=datetime.utcnow(),
+                user_id=g.user.id
+            )
+            db.session.add(post)
+            db.session.commit()
+        return redirect(url_for('index'))
 
-    context['posts'] = POSTS
+    user = {'nickname': g.user.username}
+    posts = g.user.followed_posts().all()
+
+    context = {
+        'title': 'Home',
+        'user': user,
+        'posts': posts,
+        'form': form
+    }
     return render_template('index.html', **context)
 
 

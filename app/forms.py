@@ -53,3 +53,10 @@ class ProfileForm(FlaskForm):
             self.username.errors.append("This username already exists.")
             return False
         return True
+
+
+class PostForm(FlaskForm):
+    """Constructor for a form for adding new posts."""
+
+    title = StringField('title', validators=[DataRequired()])
+    body = StringField('body', validators=[DataRequired()])

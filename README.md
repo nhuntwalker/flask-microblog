@@ -14,7 +14,7 @@ I'll update as I work through each section of the megatutorial.
 - [x] User Logins
 - [x] Profile Page and Avatars
 - [x] Unit Testing
-- [ ] Followers, Contacts, and Friends
+- [x] Followers, Contacts, and Friends
 - [ ] Pagination
 - [ ] Full Text Search
 - [ ] Email Support
