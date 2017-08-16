@@ -15,16 +15,16 @@ I'll update as I work through each section of the megatutorial.
 - [x] Profile Page and Avatars
 - [x] Unit Testing
 - [x] Followers, Contacts, and Friends
-- [ ] Pagination
-- [ ] Full Text Search
-- [ ] Email Support
-- [ ] Facelift
-- [ ] Dates and Times
-- [ ] I18n and L10n
+- [x] Pagination
+- [ ] Full Text Search -- Not doing
+- [ ] Email Support -- Not doing
+- [ ] Facelift -- Nope
+- [ ] Dates and Times -- Not important
+- [ ] I18n and L10n -- Nope
 - [ ] Ajax
-- [ ] Debugging, Testing, and Profiling
-- [ ] Deployment on Linux
-- [ ] Deployment on Heroku
+- [ ] Debugging, Testing, and Profiling -- Nah
+- [ ] Deployment on Linux -- Nah
+- [ ] Deployment on Heroku -- Nah
 
 ## Alterations 
 
