@@ -21,7 +21,24 @@
         <td></td>
     </tr>
 </table>
-{% for post in posts %}
-    {% include 'post.html' %}
-{% endfor %}
+{% if posts %}
+    <table>
+    {% for post in posts.items %}
+        {% include 'post.html' %}
+    {% endfor %}
+        <tr>
+            {% if posts.has_prev %}
+            <td><a href="{{ url_for('profile', username=user.username, page=posts.prev_num) }}">&lt;&lt; Newer posts</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            <td>|</td>
+            {% if posts.has_next %}
+            <td><a href="{{ url_for('profile', username=user.username, page=posts.next_num) }}">&gt;&gt; Older posts</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+        </tr>
+    </table>
+{% endif %}
 {% endblock %}
